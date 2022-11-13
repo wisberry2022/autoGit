@@ -1,0 +1,29 @@
+Git init 기능
+
+1. git이 있는 경로(destine)를 인자로 받음
+2. AGMachine이 git이 있는 경로로 접속함
+3. destine이 git repository인지 확인
+3-A. destine이 git repository일 경우
+	3-A-1. git status를 통해 현재 repo의 상태를 출력
+	3-A-2. 
+3-B. destine이 git repository가 아닐 경우
+	3-B-1. git init, 추가를 진행할 것인지 물음
+	3-B-2. 입력으로 추가하고자하는 레포지토리의 주소를 입력받는다.
+	3-B-3  git script 실행
+
+
+GIT 연결 해제
+
+1. 명령어 입력(인자:local git repo 경로)
+2. git remote remove origin 스크립트 실행
+3. .git 폴더 삭제
+
+
+Git push 기능
+
+  1. 목표 디렉토리 입력
+  2. 목표 디렉토리에서 git script 실행
+      2-1. git status로 상태 확인
+      2-2. git add . 실행
+      2-3. git commit 실행
+      2-4. git push origin main 실행

@@ -11,6 +11,7 @@ class AGMachine:
         print(githubLink)
         os.system('git init')
         os.system('git remote add origin %s' % (githubLink))
+        os.system('git branch -M main')
 
     def _isGit(self):
         if ('.git' in os.listdir()):
@@ -21,6 +22,20 @@ class AGMachine:
     def getCurrent(self):
         print(self.current)
 
+    def getDestine(self):
+        print(self.destine)
+
+    # 목표 디렉토리 깃 연동 해제
+    def removeGit(self):
+        gitProcess = input(
+            'Do you really want to remove this repository? >>> [Y]:yes [N]:no >> ')
+        if (gitProcess == 'Y'):
+            os.system('git remote remove origin')
+            os.system('rd /s /q .git')
+        else:
+            print('Process End')
+
+    # 목표 디렉토리 이동 및 깃 연동
     def changePath(self, destine):
         try:
             os.chdir(destine)
@@ -41,10 +56,6 @@ class AGMachine:
             print('destine path ' + destine +
                   ' is not exist in this computer \nplease check your directory path!')
 
-    def getDestine(self):
-        print(self.destine)
-
 
 test = AGMachine()
 test.changePath(sys.argv[1])
-# test.getDestine()
