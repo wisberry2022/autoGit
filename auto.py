@@ -1,5 +1,6 @@
 import os
 import sys
+import datetime as dt
 
 
 class AGMachine:
@@ -19,29 +20,83 @@ class AGMachine:
         else:
             return False
 
-    def getCurrent(self):
-        print(self.current)
-
-    def getDestine(self):
-        print(self.destine)
-
     # 목표 디렉토리 깃 연동 해제
-    def removeGit(self):
+    def _removeGit(self):
+        print("\n %s directory's Remove GitRemote Process \n" %
+              (self.destine.split('../')[-1]))
+        print('============================================== \n')
         gitProcess = input(
             'Do you really want to remove this repository? >>> [Y]:yes [N]:no >> ')
         if (gitProcess == 'Y'):
             os.system('git remote remove origin')
             os.system('rd /s /q .git')
         else:
-            print('Process End')
+            print('\n Process End \n')
+            print('============================================== \n')
+
+    # 목표 디렉토리 git status 실행
+    def _checkStatus(self):
+        print("\n %s directory's status \n" % (self.destine.split('../')[-1]))
+        print('==============================================')
+        os.system('git status')
+        print('==============================================')
+
+    # 목표 디렉토리 자동 add / commit / push 메소드
+    def _pushToRemote(self):
+        date = dt.datetime.now()
+        print("\n %s directory's Auto Git Push process START! \n ")
+        print("==============================================\n")
+        print('Staging Process \n')
+        os.system('git add .')
+        print("\n==============================================\n")
+        print("==============================================\n")
+        print('Stage Commit Process \n')
+        os.system('git commit -m "auto git upload"')
+        print("\n==============================================\n")
+        print("==============================================\n")
+        print("Remote repo push Process \n")
+        os.system('git push origin main')
+        print("\n==============================================\n")
+        print('Auto Git Push Process END! \n')
+
+    # 목표 디렉토리 이동 및 git status 확인 및 git push
+    def _gitAct(self):
+        while (True):
+            print('\n----------------------------------------------')
+            print('M E N U    Please input number to want to act')
+            print('----------------------------------------------\n')
+            print("0. Check your local repo's status")
+            print(
+                "1. Push your data in this directory to remote repo (but commit message is auto)")
+            print("2. Remove origin this local repo")
+            print("3. Process End \n")
+            print("----------------------------------------------\n")
+            userInput = input(" >>> ")
+            if (userInput == '0'):
+                self._checkStatus()
+            elif (userInput == '1'):
+                self._pushToRemote()
+            elif (userInput == '2'):
+                self._removeGit()
+            elif (userInput == '3'):
+                print('\n AutoGit Program End! Thanks! \n')
+                print('----------------------------------------------')
+                break
+
+    def getCurrent(self):
+        print(self.current)
+
+    def getDestine(self):
+        print(self.destine)
 
     # 목표 디렉토리 이동 및 깃 연동
-    def changePath(self, destine):
+    def startAutoGit(self, destine):
         try:
             os.chdir(destine)
             self.destine = destine
             if (self._isGit()):
                 print('this directory is git repository')
+                self._gitAct()
             else:
                 gitProcess = input(
                     'this directory is not git repository, do yo want to git init process? [Y]:Yes [N]:No >> ')
@@ -58,4 +113,4 @@ class AGMachine:
 
 
 test = AGMachine()
-test.changePath(sys.argv[1])
+test.startAutoGit(sys.argv[1])
