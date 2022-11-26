@@ -14,11 +14,14 @@ class AGMachine:
         os.system('git remote add origin %s' % (githubLink))
         os.system('git branch -M main')
 
-    def _isGit(self):
-        if ('.git' in os.listdir()):
-            return True
+    def _isGit(self, destine=False):
+        if (destine):
+            print('isGit exec!', destine)
         else:
-            return False
+            if ('.git' in os.listdir()):
+                return True
+            else:
+                return False
 
     # 목표 디렉토리 깃 연동 해제
     def _removeGit(self):
@@ -59,18 +62,21 @@ class AGMachine:
         print("\n==============================================\n")
         print('Auto Git Push Process END! \n')
 
+    def _menuTemplate(self, *scripts):
+        # print(scripts[0])
+        print('\n----------------------------------------------')
+        print('M E N U    Please input number to want to act')
+        print('----------------------------------------------\n')
+        for i, v in enumerate(scripts[0]):
+            print('%s. %s' % (i, v))
+        print('\n----------------------------------------------\n')
+
     # 목표 디렉토리 이동 및 git status 확인 및 git push
     def _gitAct(self):
+        scripts = ["Check your local repo's status",
+                   "Push your data in this directory to remote repo (but commit message is auto)", "Remove origin this local repo", "Process End"]
         while (True):
-            print('\n----------------------------------------------')
-            print('M E N U    Please input number to want to act')
-            print('----------------------------------------------\n')
-            print("0. Check your local repo's status")
-            print(
-                "1. Push your data in this directory to remote repo (but commit message is auto)")
-            print("2. Remove origin this local repo")
-            print("3. Process End \n")
-            print("----------------------------------------------\n")
+            self._menuTemplate(scripts)
             userInput = input(" >>> ")
             if (userInput == '0'):
                 self._checkStatus()
@@ -79,6 +85,22 @@ class AGMachine:
             elif (userInput == '2'):
                 self._removeGit()
             elif (userInput == '3'):
+                print('\n AutoGit Program End! Thanks! \n')
+                print('----------------------------------------------')
+                break
+
+    # git repo가 아닌 디렉토리에 접근했을 때 보여주는 메뉴
+    def _noGitAct(self):
+        scripts = ["Show list of sub directories in this folder", "Process End"]
+        while (True):
+            self._menuTemplate(scripts)
+            userInput = input(" >>> ")
+            if (userInput == str(scripts.index("Show list of sub directories in this folder"))):
+                print('\n')
+                for i, dir in enumerate(os.listdir()):
+                    self._isGit(dir)
+                    print(i, ' ', dir)
+            if (userInput == str(scripts.index("Process End"))):
                 print('\n AutoGit Program End! Thanks! \n')
                 print('----------------------------------------------')
                 break
@@ -105,7 +127,8 @@ class AGMachine:
                         'please input your github link to want to init this directory >> ')
                     self._gitInit(URL)
                 else:
-                    print('Program Off')
+                    # print('Program Off')
+                    self._noGitAct()
         except Exception as e:
             print(e)
             print('destine path ' + destine +
