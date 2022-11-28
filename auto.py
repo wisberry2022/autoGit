@@ -1,4 +1,5 @@
 import os
+import glob
 import sys
 import datetime as dt
 
@@ -16,7 +17,11 @@ class AGMachine:
 
     def _isGit(self, destine=False):
         if (destine):
-            print('isGit exec!', destine)
+            checkDir = self.current + '\\' + self.destine + '\\' + destine
+            if ('.git' in os.listdir(checkDir.replace('\\', '/'))):
+                return True
+            else:
+                return False
         else:
             if ('.git' in os.listdir()):
                 return True
@@ -98,8 +103,12 @@ class AGMachine:
             if (userInput == str(scripts.index("Show list of sub directories in this folder"))):
                 print('\n')
                 for i, dir in enumerate(os.listdir()):
-                    self._isGit(dir)
-                    print(i, ' ', dir)
+                    gitMark = ''
+                    if (self._isGit(dir)):
+                        gitMark = 'GitRepo'
+                    else:
+                        gitMark = 'NoGit'
+                    print(i, ' ', dir, ' ---- ', gitMark)
             if (userInput == str(scripts.index("Process End"))):
                 print('\n AutoGit Program End! Thanks! \n')
                 print('----------------------------------------------')
